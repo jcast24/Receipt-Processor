@@ -2,15 +2,16 @@
 
 public class Receipt
 {
-    public string Retailer { get; set; }
-    public string PurchaseDate { get; set; }
-    public string PurchaseTime { get; set; }
-    public List<Item> Items { get; set; }
-    public int Total { get; set; }
+    public Guid id { get; set; }
+    public string retailer { get; set; }
+    public string purchaseDate { get; set; }
+    public string purchaseTime { get; set; }
+    public List<Item> items { get; set; }
+    public string total { get; set; }
 }
 
 public class Item
 {
-    public string ShortDescription { get; set; }
-    public decimal Price { get; set; }
+    public string shortDescription { get; set; }
+    public decimal price { get; set; }
 }
