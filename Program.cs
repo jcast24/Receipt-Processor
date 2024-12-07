@@ -20,10 +20,12 @@ public class Program
             app.MapOpenApi();
         }
 
+        // testing
+        // app.MapGet("/", () => "Hello world!");
+        
         app.UseHttpsRedirection();
 
         app.UseAuthorization();
-
 
         app.MapControllers();
 
