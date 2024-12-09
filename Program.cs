@@ -1,3 +1,5 @@
+using Receipt_Processor.Services;
+
 namespace Receipt_Processor;
 
 public class Program
@@ -11,7 +13,8 @@ public class Program
         builder.Services.AddControllers();
         // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
         builder.Services.AddOpenApi();
-
+        
+        builder.Services.AddScoped<IReceiptService, ReceiptService>();
         var app = builder.Build();
 
         // Configure the HTTP request pipeline.
@@ -19,7 +22,8 @@ public class Program
         {
             app.MapOpenApi();
         }
-
+        
+        
         // testing
         // app.MapGet("/", () => "Hello world!");
         
