@@ -33,9 +33,13 @@ public class ReceiptController(IReceiptService receiptService) : ControllerBase
             return NotFound($"Item with ID {id} not found");
         }
 
-        var result = _receiptService.checkAlphanumeric(item);
-        
-        return Ok(new {points = result});
+        var checkAlphaResult = _receiptService.checkAlphanumeric(item);
+        var checkTotalResult = _receiptService.checkTotal(item);
+        var checkItemsResult = _receiptService.checkItemsCount(item);
+
+        int total = checkTotalResult + checkAlphaResult + checkItemsResult;
+
+        return Ok(new {points = total});
     }
     
     // [HttpGet]
