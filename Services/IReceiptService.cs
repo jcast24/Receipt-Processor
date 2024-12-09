@@ -9,10 +9,10 @@ public interface IReceiptService
     
     // 50 points if the total is a round number amount with no cents
     // 25 points if the total is a multiple of 0.25
-    public bool checkTotal();
+    public int checkTotal(Receipt item);
     
     // 5 points for every two items on the receipt
-    public bool checkItemsCount();
+    public int checkItemsCount(Receipt item);
 
     // if the trimmed length of the item description is a multiple of 3, multiply the price by 0.2
     // and round up to the nearest integer. Result should be number of points earned. 
@@ -27,28 +27,30 @@ public class ReceiptService : IReceiptService
 {
     public int checkAlphanumeric(Receipt item)
     {
-        int points = 0;
         string retailerName = item.retailer;
-        bool isAlpha = retailerName.All(char.IsLetterOrDigit);
+        int alphaCount = retailerName.Count(char.IsLetterOrDigit);
+        return alphaCount;
+    }
+    
+    public int checkTotal(Receipt item)
+    {
+        // convert the total prop from a string to a float 
+        decimal total = decimal.Parse(item.total);
 
-        if (isAlpha)
+        bool isRounded = total % 1 == 0;
+
+        if (isRounded)
         {
-            points += retailerName.Length;
+            return 50;
         }
-
-        return points;
+        return 25;
     }
 
 
-    public bool checkTotal()
+    public int checkItemsCount(Receipt item)
     {
-        throw new NotImplementedException();
-    }
-
-
-    public bool checkItemsCount()
-    {
-        throw new NotImplementedException();
+        int count = (item.items.Count / 2) * 5;
+        return count;
     }
 
     public bool checkDescription()
