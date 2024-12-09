@@ -2,5 +2,5 @@
 
 public class ReceiptDatabase
 {
-    private static List<Receipt> Receipt = new List<Receipt>() { };
+    internal static List<Receipt> ReceiptDB = new List<Receipt>() { };
 }
