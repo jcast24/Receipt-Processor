@@ -1,4 +1,5 @@
-﻿using Receipt_Processor.Models;
+﻿using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Receipt_Processor.Models;
 
 namespace Receipt_Processor.Services;
 
@@ -20,7 +21,8 @@ public interface IReceiptService
     
     // 6 points if the day in the purchase date is odd
     // 10 points if the time of the purchase is between 2:00 pm and before 4:00pm (convert to rest of world time)
-    public bool checkDateAndTime(Receipt item);
+    public int checkDate(Receipt item);
+    public int checkTime(Receipt item);
 }
 
 public class ReceiptService : IReceiptService
@@ -87,7 +89,26 @@ public class ReceiptService : IReceiptService
         return finalResult;
     }
 
-    public bool checkDateAndTime(Receipt item)
+    /*
+     * 6 points if the purchase date is odd
+     * 10 points if the time of the purchase is between 2:00pm and 4:00pm (convert to military time)
+     * The format is YYYY-MM-DD
+     */
+    public int checkDate(Receipt item)
+    {
+        string itemPurchaseDate = item.purchaseDate;
+        DateTime date = DateTime.ParseExact(itemPurchaseDate, "yyyy-MM-dd", null);
+
+        int day = date.Day;
+
+        if (day % 2 == 1)
+        {
+            return 6;
+        }
+        return 0;
+    }
+
+    public int checkTime(Receipt item)
     {
         throw new NotImplementedException();
     }
