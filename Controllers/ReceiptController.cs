@@ -36,21 +36,11 @@ public class ReceiptController(IReceiptService receiptService) : ControllerBase
         var checkAlphaResult = _receiptService.checkAlphanumeric(item);
         var checkTotalResult = _receiptService.checkTotal(item);
         var checkItemsResult = _receiptService.checkItemsCount(item);
+        var checkItemsDescription = _receiptService.checkDescription(item);
 
-        int total = checkTotalResult + checkAlphaResult + checkItemsResult;
+        decimal total = checkTotalResult + checkAlphaResult + checkItemsResult + checkItemsDescription;
 
         return Ok(new {points = total});
     }
     
-    // [HttpGet]
-    // [Route("test")]
-    // public ActionResult GetPointsById()
-    // {
-    //     int num1 = 2;
-    //     int num2 = 2;
-    //
-    //     int sum = num1 + num2;
-    //     var data = new { sum = sum };
-    //     return Ok(data);
-    // }
 }
