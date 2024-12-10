@@ -16,11 +16,11 @@ public interface IReceiptService
 
     // if the trimmed length of the item description is a multiple of 3, multiply the price by 0.2
     // and round up to the nearest integer. Result should be number of points earned. 
-    public bool checkDescription();
+    public decimal checkDescription(Receipt item);
     
     // 6 points if the day in the purchase date is odd
     // 10 points if the time of the purchase is between 2:00 pm and before 4:00pm (convert to rest of world time)
-    public bool checkDateAndTime();
+    public bool checkDateAndTime(Receipt item);
 }
 
 public class ReceiptService : IReceiptService
@@ -34,16 +34,23 @@ public class ReceiptService : IReceiptService
     
     public int checkTotal(Receipt item)
     {
-        // convert the total prop from a string to a float 
-        decimal total = decimal.Parse(item.total);
+        if (!decimal.TryParse(item.total, out decimal convertedTotal))
+        {
+            throw new ArgumentException("Invalid");
+        }
 
-        bool isRounded = total % 1 == 0;
+        const decimal multiplier = 0.25m;
 
-        if (isRounded)
+        if (convertedTotal % 1 == 0)
         {
             return 50;
         }
-        return 25;
+        else if (convertedTotal % multiplier == 0)
+        {
+            return 25;
+        }
+
+        return 0;
     }
 
 
@@ -52,13 +59,35 @@ public class ReceiptService : IReceiptService
         int count = (item.items.Count / 2) * 5;
         return count;
     }
-
-    public bool checkDescription()
+    
+    // check if the description is a multiple of 3
+    // if so multiply the price by 0.2 and round up to nearest integer
+    public decimal checkDescription(Receipt item)
     {
-        throw new NotImplementedException();
+        decimal result = 0m;
+        decimal finalResult = 0m;
+        decimal roundedResult = 0m;
+        decimal roundedResultUp = 0m;
+        foreach(var i in item.items)
+        {
+            string description = i.shortDescription.Trim();
+            int descriptionLength = description.Length;
+            decimal price = i.price;
+            decimal multiplier = 0.2m;
+            
+            if (descriptionLength % 3 == 0)
+            {
+                result = price * multiplier;
+                roundedResult = Math.Round(result, 2);
+                roundedResultUp = Math.Ceiling(roundedResult);
+
+            }
+            finalResult += roundedResultUp;
+        }
+        return finalResult;
     }
 
-    public bool checkDateAndTime()
+    public bool checkDateAndTime(Receipt item)
     {
         throw new NotImplementedException();
     }
