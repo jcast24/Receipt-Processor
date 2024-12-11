@@ -117,7 +117,7 @@ public class ReceiptService : IReceiptService
 
         if (convertPurchaseTime >= startTime && convertPurchaseTime <= endTime)
         {
-            return 6;
+            return 10;
         }
         return 0;
     }
