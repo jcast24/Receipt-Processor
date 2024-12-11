@@ -5,38 +5,31 @@ namespace Receipt_Processor.Services;
 
 public interface IReceiptService
 {
-    // 1 point for every alphanumeric character in the retailer name
-    public int checkAlphanumeric(Receipt item);
-    
-    // 50 points if the total is a round number amount with no cents
-    // 25 points if the total is a multiple of 0.25
-    public int checkTotal(Receipt item);
-    
-    // 5 points for every two items on the receipt
-    public int checkItemsCount(Receipt item);
-
-    // if the trimmed length of the item description is a multiple of 3, multiply the price by 0.2
-    // and round up to the nearest integer. Result should be number of points earned. 
-    public decimal checkDescription(Receipt item);
-    
-    // 6 points if the day in the purchase date is odd
-    // 10 points if the time of the purchase is between 2:00 pm and before 4:00pm (convert to rest of world time)
-    public int checkDate(Receipt item);
-    public int checkTime(Receipt item);
+    public int CheckAlphanumeric(Receipt item);
+    public int CheckTotal(Receipt item);
+    public int CheckItemsCount(Receipt item);
+    public decimal CheckDescription(Receipt item);
+    public int CheckDate(Receipt item);
+    public int CheckTime(Receipt item);
 }
 
+/*
+ * Each method here processes the logic behind getting the points for each JSON payload. aaaaa
+ */
 public class ReceiptService : IReceiptService
 {
-    public int checkAlphanumeric(Receipt item)
+    // Check to see if each character is a letter or a string in item.Retailer
+    public int CheckAlphanumeric(Receipt item)
     {
-        string retailerName = item.retailer;
+        string retailerName = item.Retailer;
         int alphaCount = retailerName.Count(char.IsLetterOrDigit);
         return alphaCount;
     }
     
-    public int checkTotal(Receipt item)
+    // Check if the total is a multiple of 0.25, a whole number, or both
+    public int CheckTotal(Receipt item)
     {
-        if (!decimal.TryParse(item.total, out decimal convertedTotal))
+        if (!decimal.TryParse(item.Total, out decimal convertedTotal))
         {
             throw new ArgumentException("Invalid");
         }
@@ -58,26 +51,29 @@ public class ReceiptService : IReceiptService
         }
         return 0;
     }
-
-    public int checkItemsCount(Receipt item)
+    
+    // Check the amount of items in a receipt
+    public int CheckItemsCount(Receipt item)
     {
-        int count = (item.items.Count / 2) * 5;
+        int count = (item.Items.Count / 2) * 5;
         return count;
     }
     
-    // check if the description is a multiple of 3
-    // if so multiply the price by 0.2 and round up to nearest integer
-    public decimal checkDescription(Receipt item)
+    /*
+     * Check the length of the description of each item in the receipt.
+     * If the length is a multiple of 3, multiply by 0.2 and add the total together
+     */
+    public decimal CheckDescription(Receipt item)
     {
         decimal result = 0m;
         decimal finalResult = 0m;
         decimal roundedResult = 0m;
         decimal roundedResultUp = 0m;
-        foreach(var i in item.items)
+        foreach(var individualItem in item.Items)
         {
-            string description = i.shortDescription.Trim();
+            string description = individualItem.ShortDescription.Trim();
             int descriptionLength = description.Length;
-            decimal price = i.price;
+            decimal price = individualItem.Price;
             decimal multiplier = 0.2m;
             
             if (descriptionLength % 3 == 0)
@@ -91,15 +87,11 @@ public class ReceiptService : IReceiptService
         }
         return finalResult;
     }
-
-    /*
-     * 6 points if the purchase date is odd
-     * 10 points if the time of the purchase is between 2:00pm and 4:00pm (convert to military time)
-     * The format is YYYY-MM-DD
-     */
-    public int checkDate(Receipt item)
+    
+    // check if the date is an odd number
+    public int CheckDate(Receipt item)
     {
-        string itemPurchaseDate = item.purchaseDate;
+        string itemPurchaseDate = item.PurchaseDate;
         DateTime date = DateTime.ParseExact(itemPurchaseDate, "yyyy-MM-dd", null);
 
         int day = date.Day;
@@ -111,9 +103,10 @@ public class ReceiptService : IReceiptService
         return 0;
     }
 
-    public int checkTime(Receipt item)
+    // check if the time is between 2:00 and 4:00, if so award points. 
+    public int CheckTime(Receipt item)
     {
-        string itemPurchaseTime = item.purchaseTime;
+        string itemPurchaseTime = item.PurchaseTime;
         TimeSpan startTime = TimeSpan.Parse("14:00");
         TimeSpan endTime = TimeSpan.Parse("16:00");
         TimeSpan convertPurchaseTime = TimeSpan.Parse(itemPurchaseTime);
