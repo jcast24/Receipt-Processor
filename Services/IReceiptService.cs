@@ -110,7 +110,16 @@ public class ReceiptService : IReceiptService
 
     public int checkTime(Receipt item)
     {
-        throw new NotImplementedException();
+        string itemPurchaseTime = item.purchaseTime;
+        TimeSpan startTime = TimeSpan.Parse("14:00");
+        TimeSpan endTime = TimeSpan.Parse("16:00");
+        TimeSpan convertPurchaseTime = TimeSpan.Parse(itemPurchaseTime);
+
+        if (convertPurchaseTime >= startTime && convertPurchaseTime <= endTime)
+        {
+            return 6;
+        }
+        return 0;
     }
 }
 
