@@ -1,5 +1,13 @@
 # Receipt Processor
 
+## Intro
+
+--- 
+
+Primarily written in C# and the ASP.NET framework to handle the API and its request. 
+
+I also have the project written in Go linked here: [add link]
+
 ## API Specification
 
 --- 
@@ -75,6 +83,6 @@ To build the docker file run the command:
 To run the docker file: 
 
 ```bash
-  docker run -d -p 8080:80 --name receipt-processor
+  docker run -d -p 8080:80 receipt-processor
 ```
 
