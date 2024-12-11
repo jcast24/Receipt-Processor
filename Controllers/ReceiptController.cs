@@ -8,9 +8,7 @@ namespace Receipt_Processor.Controllers;
 [Route("[controller]")]
 public class ReceiptController(IReceiptService receiptService) : ControllerBase
 {
-    // DI ReceiptService class
-    private readonly IReceiptService _receiptService = receiptService;
-    
+
     [HttpPost]
     [Route("process")]
     public ActionResult<Guid> CreateIdFromReceipt([FromBody] Receipt receipt)
@@ -33,12 +31,14 @@ public class ReceiptController(IReceiptService receiptService) : ControllerBase
             return NotFound($"Item with ID {id} not found");
         }
 
-        var checkAlphaResult = _receiptService.checkAlphanumeric(item);
-        var checkTotalResult = _receiptService.checkTotal(item);
-        var checkItemsResult = _receiptService.checkItemsCount(item);
-        var checkItemsDescription = _receiptService.checkDescription(item);
-
-        decimal total = checkTotalResult + checkAlphaResult + checkItemsResult + checkItemsDescription;
+        var checkAlphaResult = receiptService.checkAlphanumeric(item);
+        var checkTotalResult = receiptService.checkTotal(item);
+        var checkItemsResult = receiptService.checkItemsCount(item);
+        var checkItemsDescription = receiptService.checkDescription(item);
+        var checkPurchaseDate = receiptService.checkDate(item);
+        var checkPurchaseTime = receiptService.checkTime(item);
+        decimal total = checkTotalResult + checkAlphaResult + checkItemsResult + 
+                        checkItemsDescription + checkPurchaseDate + checkPurchaseTime;
 
         return Ok(new {points = total});
     }
