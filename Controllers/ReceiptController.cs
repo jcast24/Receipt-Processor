@@ -8,35 +8,45 @@ namespace Receipt_Processor.Controllers;
 [Route("[controller]")]
 public class ReceiptController(IReceiptService receiptService) : ControllerBase
 {
-
+    
+    /*
+     * POST
+     * Create Id when passing in JSON receipt object
+     * Response: JSON object giving the Id for the receipt
+     */
+    
     [HttpPost]
     [Route("process")]
     public ActionResult<Guid> CreateIdFromReceipt([FromBody] Receipt receipt)
     {
-        receipt.id = Guid.NewGuid();
+        receipt.Id = Guid.NewGuid();
         ReceiptDatabase.ReceiptDB.Add(receipt);
 
-        return Ok(new { id = receipt.id});
+        return Ok(new { id = receipt.Id});
     }
     
-    // create the logic to process the points
-    // response is going to be a json object called "points"
+    /*
+     * GET 
+     * Process points via Id
+     * Response: JSON object named "points"
+     */
+    
     [HttpGet("{id}/points")]
     public ActionResult<List<Receipt>> GetPointsById(Guid id)
     {
-        var item = ReceiptDatabase.ReceiptDB.FirstOrDefault(i => i.id == id);
+        var item = ReceiptDatabase.ReceiptDB.FirstOrDefault(i => i.Id == id);
         
         if (item == null)
         {
             return NotFound($"Item with ID {id} not found");
         }
 
-        var checkAlphaResult = receiptService.checkAlphanumeric(item);
-        var checkTotalResult = receiptService.checkTotal(item);
-        var checkItemsResult = receiptService.checkItemsCount(item);
-        var checkItemsDescription = receiptService.checkDescription(item);
-        var checkPurchaseDate = receiptService.checkDate(item);
-        var checkPurchaseTime = receiptService.checkTime(item);
+        var checkAlphaResult = receiptService.CheckAlphanumeric(item);
+        var checkTotalResult = receiptService.CheckTotal(item);
+        var checkItemsResult = receiptService.CheckItemsCount(item);
+        var checkItemsDescription = receiptService.CheckDescription(item);
+        var checkPurchaseDate = receiptService.CheckDate(item);
+        var checkPurchaseTime = receiptService.CheckTime(item);
         decimal total = checkTotalResult + checkAlphaResult + checkItemsResult + 
                         checkItemsDescription + checkPurchaseDate + checkPurchaseTime;
 
