@@ -16,7 +16,7 @@ public class ReceiptController(IReceiptService receiptService) : ControllerBase
         receipt.id = Guid.NewGuid();
         ReceiptDatabase.ReceiptDB.Add(receipt);
 
-        return Ok(receipt.id);
+        return Ok(new { id = receipt.id});
     }
     
     // create the logic to process the points
