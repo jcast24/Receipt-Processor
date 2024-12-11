@@ -41,20 +41,23 @@ public class ReceiptService : IReceiptService
             throw new ArgumentException("Invalid");
         }
 
-        const decimal multiplier = 0.25m;
-
-        if (convertedTotal % 1 == 0)
+        bool isWholeNumber = convertedTotal % 1 == 0;
+        bool isMulitpleOfQuarter = convertedTotal % 0.25m == 0;
+        
+        if (isWholeNumber && isMulitpleOfQuarter)
+        {
+            return 75;
+        }
+        else if (isWholeNumber)
         {
             return 50;
         }
-        else if (convertedTotal % multiplier == 0)
+        else if (isMulitpleOfQuarter)
         {
             return 25;
         }
-
         return 0;
     }
-
 
     public int checkItemsCount(Receipt item)
     {
@@ -120,6 +123,7 @@ public class ReceiptService : IReceiptService
             return 10;
         }
         return 0;
+        
     }
 }
 
