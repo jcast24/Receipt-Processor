@@ -4,7 +4,7 @@
 
 Primarily written in C# and the ASP.NET framework to handle the API and its request.
 
-I also have the project written in Go linked here: [add link]
+I also have the project written in Go linked here: [Receipt-Processor in Go](https://github.com/jcast24/Receipt-Processor-Go)
 
 ## API Specification
 
@@ -67,7 +67,6 @@ Response:
 ```
 
 ## Dockerfile
----
 Included in this project is the `Dockerfile` to be able to run the .NET project.
 
 To build the docker file run the command:
