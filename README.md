@@ -1,16 +1,14 @@
 # Receipt Processor
 
 ## Intro
+---
 
---- 
-
-Primarily written in C# and the ASP.NET framework to handle the API and its request. 
+Primarily written in C# and the ASP.NET framework to handle the API and its request.
 
 I also have the project written in Go linked here: [add link]
 
 ## API Specification
-
---- 
+---
 
 ### Process Receipt
 
@@ -30,13 +28,16 @@ Passing in JSON receipt into `POST` method:
     {
       "shortDescription": "Gatorade",
       "price": "2.25"
-    },{
+    },
+    {
       "shortDescription": "Gatorade",
       "price": "2.25"
-    },{
+    },
+    {
       "shortDescription": "Gatorade",
       "price": "2.25"
-    },{
+    },
+    {
       "shortDescription": "Gatorade",
       "price": "2.25"
     }
@@ -67,22 +68,19 @@ Response:
 }
 ```
 
-
-## Dockerfile 
-
+## Dockerfile
 ---
 
-Included in this project is the `Dockerfile` to be able to run the .NET project. 
+Included in this project is the `Dockerfile` to be able to run the .NET project.
 
-To build the docker file run the command: 
+To build the docker file run the command:
 
 ```bash
   docker build -t receipt-processor .
 ```
 
-To run the docker file: 
+To run the docker file:
 
 ```bash
   docker run -d -p 8080:80 receipt-processor
 ```
-
